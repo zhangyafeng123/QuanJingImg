@@ -7,8 +7,10 @@
 //
 
 #import "ViewController.h"
+#import "PLView.h"
+@interface ViewController ()<PLViewDelegate>
 
-@interface ViewController ()
+@property (nonatomic, strong) PLView            * plView;
 
 @end
 
@@ -16,9 +18,24 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    [self loadDataOne];
 }
-
+//加载单张全景图
+- (void)loadDataOne {
+    _plView = [[PLView alloc] initWithFrame:self.view.bounds];
+    _plView.delegate = self;
+    NSObject<PLIPanorama> *panorama = nil;
+    //迪拜2048x1024
+    NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"1" ofType:@"jpg"];
+    
+    //2048 * 1024
+    panorama = [PLSphericalPanorama panorama];
+    [(PLSphericalPanorama *)panorama setImage:[PLImage imageWithPath:imagePath]];
+    
+    [_plView setPanorama:panorama];
+    [self.view addSubview:_plView];
+    
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
